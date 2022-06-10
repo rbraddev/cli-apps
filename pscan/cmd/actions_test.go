@@ -101,6 +101,10 @@ func TestIntegration(t *testing.T) {
 	expectedOut += fmt.Sprintf("Deleted host: %s\n", delHost)
 	expectedOut += strings.Join(hostsEnd, "\n")
 	expectedOut += fmt.Sprintln()
+	for _, v := range hostsEnd {
+		expectedOut += fmt.Sprintf("%s: Host not found\n", v)
+		expectedOut += fmt.Sprintln()
+	}
 
 	if err := addAction(&out, tf, hosts); err != nil {
 		t.Fatalf("want no error got %q\n", err)
@@ -116,6 +120,10 @@ func TestIntegration(t *testing.T) {
 
 	if err := listAction(&out, tf, nil); err != nil {
 		t.Fatalf("want no error got %q\n", err)
+	}
+
+	if err := scanAction(&out, tf, nil); err != nil {
+		t.Fatalf("want no error, got %q\n", err)
 	}
 
 	if out.String() != expectedOut {
